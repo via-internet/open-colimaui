@@ -1,16 +1,17 @@
-# OpenDockerWebUI
+# OpenDockerWebUI Actions UI
 
-A Docker Compose demo that recreates a Docker Desktop-like UI with:
+Docker Desktop-style Vue/FastAPI demo.
 
-- FastAPI backend
-- Vue 3 frontend
-- Docker Desktop-style navigation
-- Containers table
-- Images page
-- Volumes page
-- Builds page placeholder
-- Settings page
-- Docker Engine status API
+## Added actions
+
+- Containers:
+  - Ports are links and open in a new tab.
+  - Container names open a browser page with `docker exec` console commands.
+  - Running containers can be stopped.
+  - Stopped containers can be started.
+
+- Images:
+  - Image rows have a Run action.
 
 ## Start
 
@@ -24,23 +25,6 @@ Open:
 http://localhost:5173
 ```
 
-## API
-
-```text
-GET /health
-GET /docker/info
-GET /docker/containers
-GET /docker/images
-GET /docker/volumes
-```
-
 ## Security
 
-This demo mounts the Docker socket:
-
-```yaml
-/var/run/docker.sock:/var/run/docker.sock
-```
-
-Do not expose this backend publicly without authentication and authorization.
-# open-dockerui
+The backend mounts `/var/run/docker.sock`, which gives privileged Docker host access.

@@ -1,6 +1,6 @@
 set shell := ["bash", "-cu"]
 
-export COMPOSE_PROJECT_NAME := "open-dockerui"
+export COMPOSE_PROJECT_NAME := "opendockerwebui"
 
 FRONTEND_URL := "http://localhost:5173"
 BACKEND_URL := "http://localhost:8000"
@@ -14,12 +14,52 @@ up:
 up-d:
     docker compose up --build -d
 
+backend-container:
+    docker compose up --build backend
+
+frontend-local:
+    cd frontend && npm install && npm run dev -- --host 0.0.0.0
+
+dev-backend-container:
+    docker compose up --build -d backend
+    cd frontend && npm install && npm run dev -- --host 0.0.0.0
+
+frontend-container:
+    docker compose up --build frontend
+
+backend-local:
+    cd backend && python -m venv .venv
+    cd backend && source .venv/bin/activate && pip install -r requirements.txt
+    cd backend && source .venv/bin/activate && uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+dev-frontend-container:
+    docker compose up --build -d frontend
+    cd backend && python -m venv .venv
+    cd backend && source .venv/bin/activate && pip install -r requirements.txt
+    cd backend && source .venv/bin/activate && uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+dev-local:
+    cd backend && python -m venv .venv
+    cd backend && source .venv/bin/activate && pip install -r requirements.txt
+    cd backend && source .venv/bin/activate && uvicorn main:app --host 0.0.0.0 --port 8000 --reload & \
+    cd frontend && npm install && npm run dev -- --host 0.0.0.0
+
 down:
     docker compose down
+
+stop:
+    docker compose stop
+
+start:
+    docker compose start
 
 restart:
     docker compose down
     docker compose up --build
+
+restart-d:
+    docker compose down
+    docker compose up --build -d
 
 rebuild:
     docker compose build --no-cache
@@ -55,26 +95,11 @@ backend-shell:
 frontend-shell:
     docker compose exec frontend sh
 
-backend-root-shell:
-    docker compose exec -u root backend bash
-
 ps:
     docker compose ps
 
-top:
-    docker compose top
-
 stats:
     docker stats
-
-images:
-    docker images
-
-volumes:
-    docker volume ls
-
-networks:
-    docker network ls
 
 api-health:
     curl -s {{BACKEND_URL}}/health | python -m json.tool
@@ -88,55 +113,19 @@ api-containers:
 api-images:
     curl -s {{BACKEND_URL}}/docker/images | python -m json.tool
 
+api-volumes:
+    curl -s {{BACKEND_URL}}/docker/volumes | python -m json.tool
+
 open-frontend:
     open {{FRONTEND_URL}}
-
-open-backend:
-    open {{BACKEND_URL}}
 
 open-api-docs:
     open {{BACKEND_URL}}/docs
 
-frontend-install:
-    docker compose exec frontend npm install
-
-frontend-build:
-    docker compose exec frontend npm run build
-
-backend-pip-list:
-    docker compose exec backend pip list
-
-backend-routes:
-    curl -s {{BACKEND_URL}}/openapi.json | python -m json.tool
-
-docker-version:
-    docker version
-
-docker-info:
-    docker info
-
-docker-context:
-    docker context ls
-
-docker-socket:
-    ls -lah /var/run/docker.sock
-
-health:
-    @echo "Frontend:"
-    @curl -I {{FRONTEND_URL}} || true
-    @echo ""
-    @echo "Backend:"
-    @curl -I {{BACKEND_URL}} || true
-
 urls:
-    @echo ""
     @echo "Frontend : {{FRONTEND_URL}}"
     @echo "Backend  : {{BACKEND_URL}}"
     @echo "Swagger  : {{BACKEND_URL}}/docs"
-    @echo ""
-
-tree:
-    tree -I 'node_modules|dist|__pycache__|.git'
 
 config:
     docker compose config
@@ -144,20 +133,11 @@ config:
 validate:
     docker compose config --quiet
 
-stop:
-    docker compose stop
+docker-info:
+    docker info
 
-start:
-    docker compose start
+docker-socket:
+    ls -lah /var/run/docker.sock
 
-rm:
-    docker compose rm -f
-
-prune-images:
-    docker image prune -f
-
-prune-volumes:
-    docker volume prune -f
-
-prune-networks:
-    docker network prune -f
+tree:
+    tree -I 'node_modules|dist|__pycache__|.venv|.git'

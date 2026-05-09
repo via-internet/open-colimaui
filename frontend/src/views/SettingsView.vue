@@ -26,13 +26,13 @@ onMounted(testConnection)
     <h1 class="page-title">Extensions</h1>
     <p class="page-subtitle">Demo settings and backend status.</p>
 
-    <div class="simple-card">
+    <div class="simple-card" style="margin-top: 32px;">
       <h2>Backend API</h2>
       <p><strong>URL:</strong> {{ API_BASE }}</p>
       <p><strong>Status:</strong> {{ health }}</p>
       <p v-if="error"><strong>Error:</strong> {{ error }}</p>
 
-      <button class="icon-button" @click="testConnection">Test connection</button>
+      <button class="primary-button" @click="testConnection">Test connection</button>
     </div>
   </section>
 </template>
