@@ -1,6 +1,6 @@
 set shell := ["bash", "-cu"]
 
-export COMPOSE_PROJECT_NAME := "opendockerwebui"
+export COMPOSE_PROJECT_NAME := "open-dockerui"
 
 FRONTEND_URL := "http://localhost:5173"
 BACKEND_URL := "http://localhost:8000"
