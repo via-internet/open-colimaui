@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { Columns3, ExternalLink, Filter, Play, RefreshCw, Search, MoreVertical, Trash2 } from 'lucide-vue-next'
-import { getImages, runImage } from '@/services/dockerApi'
+import { getImages, runImage } from '@/services/colimaApi'
 
 const images = ref([])
 const loading = ref(true)
@@ -84,14 +84,14 @@ onMounted(loadImages)
     </div>
 
     <p class="page-subtitle">
-      View and manage your local and Docker Hub images.
+      View and manage your local and registry images.
       <a href="#" class="learn-link">Learn more</a>
       <ExternalLink size="17" color="#2563eb" />
     </p>
 
     <div class="tabs">
       <button class="tab active">Local</button>
-      <button class="tab">Docker Hub repositories</button>
+      <button class="tab">Registry repositories</button>
     </div>
 
     <div class="usage-row">

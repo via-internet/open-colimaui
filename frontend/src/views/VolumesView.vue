@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { Columns3, Copy, ExternalLink, Filter, Search, Trash2 } from 'lucide-vue-next'
-import { getVolumes } from '@/services/dockerApi'
+import { getVolumes } from '@/services/colimaApi'
 
 const volumes = ref([])
 const loading = ref(true)

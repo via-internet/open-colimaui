@@ -1,12 +1,31 @@
 set shell := ["bash", "-cu"]
 
-export COMPOSE_PROJECT_NAME := "opendockerwebui"
+export COMPOSE_PROJECT_NAME := "opencolimaui"
 
 FRONTEND_URL := "http://localhost:5173"
 BACKEND_URL := "http://localhost:8000"
 
 default:
     @just --list
+
+# --- Colima lifecycle ---
+
+colima-start:
+    colima start
+
+colima-stop:
+    colima stop
+
+colima-status:
+    colima status
+
+colima-ssh:
+    colima ssh
+
+colima-socket:
+    ls -lah ~/.colima/default/docker.sock
+
+# --- Compose ---
 
 up:
     docker compose up --build
@@ -101,20 +120,22 @@ ps:
 stats:
     docker stats
 
+# --- API helpers ---
+
 api-health:
     curl -s {{BACKEND_URL}}/health | python -m json.tool
 
 api-info:
-    curl -s {{BACKEND_URL}}/docker/info | python -m json.tool
+    curl -s {{BACKEND_URL}}/colima/info | python -m json.tool
 
 api-containers:
-    curl -s {{BACKEND_URL}}/docker/containers | python -m json.tool
+    curl -s {{BACKEND_URL}}/colima/containers | python -m json.tool
 
 api-images:
-    curl -s {{BACKEND_URL}}/docker/images | python -m json.tool
+    curl -s {{BACKEND_URL}}/colima/images | python -m json.tool
 
 api-volumes:
-    curl -s {{BACKEND_URL}}/docker/volumes | python -m json.tool
+    curl -s {{BACKEND_URL}}/colima/volumes | python -m json.tool
 
 open-frontend:
     open {{FRONTEND_URL}}
@@ -133,11 +154,8 @@ config:
 validate:
     docker compose config --quiet
 
-docker-info:
-    docker info
-
-docker-socket:
-    ls -lah /var/run/docker.sock
+colima-info:
+    colima status
 
 tree:
     tree -I 'node_modules|dist|__pycache__|.venv|.git'

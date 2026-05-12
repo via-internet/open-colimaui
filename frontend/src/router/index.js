@@ -5,6 +5,7 @@ import ImagesView from '@/views/ImagesView.vue'
 import VolumesView from '@/views/VolumesView.vue'
 import BuildsView from '@/views/BuildsView.vue'
 import SettingsView from '@/views/SettingsView.vue'
+import ColimaView from '@/views/ColimaView.vue'
 
 const routes = [
   { path: '/', redirect: '/containers' },
@@ -12,7 +13,8 @@ const routes = [
   { path: '/images', name: 'images', component: ImagesView },
   { path: '/volumes', name: 'volumes', component: VolumesView },
   { path: '/builds', name: 'builds', component: BuildsView },
-  { path: '/settings', name: 'settings', component: SettingsView }
+  { path: '/settings', name: 'settings', component: SettingsView },
+  { path: '/colima', name: 'colima', component: ColimaView }
 ]
 
 export default createRouter({

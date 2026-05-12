@@ -1,14 +1,14 @@
 <script setup>
 import {
+  Activity,
   Container,
   Database,
   Hammer,
   Hexagon,
-  LifeBuoy,
   PackageSearch,
   Puzzle,
   Settings,
-  Sparkles
+  Terminal
 } from 'lucide-vue-next'
 </script>
 
@@ -16,10 +16,9 @@ import {
   <div class="desktop-shell">
     <aside class="desktop-sidebar">
       <nav class="sidebar-section">
-        <RouterLink to="/gordon" class="sidebar-link">
-          <Sparkles size="22" />
-          <span>Ask Gordon</span>
-          <span class="beta">BETA</span>
+        <RouterLink to="/colima" class="sidebar-link">
+          <Activity size="22" />
+          <span>Colima</span>
         </RouterLink>
 
         <RouterLink to="/containers" class="sidebar-link">
@@ -46,14 +45,14 @@ import {
       <div class="sidebar-separator"></div>
 
       <nav class="sidebar-section">
-        <a href="https://hub.docker.com" target="_blank" class="sidebar-link">
+        <a href="https://github.com/abiosoft/colima" target="_blank" class="sidebar-link">
           <Hexagon size="22" />
-          <span>Docker Hub</span>
+          <span>Colima on GitHub</span>
         </a>
 
-        <a href="https://docs.docker.com/scout/" target="_blank" class="sidebar-link">
-          <LifeBuoy size="22" />
-          <span>Docker Scout</span>
+        <a href="https://hub.docker.com" target="_blank" class="sidebar-link">
+          <Terminal size="22" />
+          <span>Docker Hub</span>
         </a>
       </nav>
 
@@ -93,10 +92,6 @@ import {
 }
 .sidebar-link svg { color: #596272; }
 .sidebar-link:hover, .sidebar-link.router-link-active { background: #d1d1d4; }
-.beta {
-  display: inline-flex; align-items: center; height: 22px; padding: 0 8px; margin-left: -10px;
-  border-radius: 12px; color: #2563eb; background: #dbeafe; font-size: 13px; font-weight: 800;
-}
 .sidebar-separator { height: 1px; background: #dedfe2; margin: 18px 0; }
 .sidebar-bottom { margin-top: auto; }
 .sidebar-link.compact { font-size: 18px; }

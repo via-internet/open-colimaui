@@ -21,35 +21,35 @@ export function getHealth() {
   return request('/health')
 }
 
-export function getDockerInfo() {
-  return request('/docker/info')
+export function getColimaInfo() {
+  return request('/colima/info')
 }
 
 export function getContainers() {
-  return request('/docker/containers')
+  return request('/colima/containers')
 }
 
 export function startContainer(containerId) {
-  return request(`/docker/containers/${containerId}/start`, { method: 'POST' })
+  return request(`/colima/containers/${containerId}/start`, { method: 'POST' })
 }
 
 export function stopContainer(containerId) {
-  return request(`/docker/containers/${containerId}/stop`, { method: 'POST' })
+  return request(`/colima/containers/${containerId}/stop`, { method: 'POST' })
 }
 
 export function getImages() {
-  return request('/docker/images')
+  return request('/colima/images')
 }
 
 export function runImage(image) {
-  return request('/docker/images/run', {
+  return request('/colima/images/run', {
     method: 'POST',
     body: JSON.stringify({ image })
   })
 }
 
 export function getVolumes() {
-  return request('/docker/volumes')
+  return request('/colima/volumes')
 }
 
 export { API_BASE }

@@ -23,7 +23,7 @@ def cors_origins() -> list[str]:
     return [item.strip() for item in raw.split(",") if item.strip()]
 
 
-app = FastAPI(title="OpenDockerWebUI API", version="1.1.0")
+app = FastAPI(title="OpenColimaUI API", version="1.1.0")
 
 app.add_middleware(
     CORSMiddleware,
@@ -34,15 +34,15 @@ app.add_middleware(
 )
 
 
-def get_docker_client():
+def get_colima_client():
     try:
         return docker.from_env()
     except DockerException as exc:
-        raise HTTPException(status_code=503, detail=f"Docker unavailable: {exc}") from exc
+        raise HTTPException(status_code=503, detail=f"Colima unavailable: {exc}") from exc
 
 
 def get_container_or_404(container_id: str):
-    client = get_docker_client()
+    client = get_colima_client()
     try:
         return client.containers.get(container_id)
     except NotFound as exc:
@@ -131,9 +131,9 @@ def health() -> dict[str, str]:
     return {"status": "ok"}
 
 
-@app.get("/docker/info")
-def docker_info() -> dict[str, Any]:
-    client = get_docker_client()
+@app.get("/colima/info")
+def colima_info() -> dict[str, Any]:
+    client = get_colima_client()
 
     try:
         info = client.info()
@@ -159,9 +159,9 @@ def docker_info() -> dict[str, Any]:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
-@app.get("/docker/containers")
-def docker_containers() -> list[dict[str, Any]]:
-    client = get_docker_client()
+@app.get("/colima/containers")
+def colima_containers() -> list[dict[str, Any]]:
+    client = get_colima_client()
 
     try:
         containers = client.containers.list(all=True)
@@ -184,7 +184,7 @@ def docker_containers() -> list[dict[str, Any]]:
                     "ports": ports,
                     "port_links": port_links(ports),
                     "ports_text": port_summary(ports),
-                    "console_url": f"/docker/containers/{container.id}/console",
+                    "console_url": f"/colima/containers/{container.id}/console",
                     "project": project_name(container),
                     "service": service_name(container),
                     "cpu_percent": 0,
@@ -207,7 +207,7 @@ def docker_containers() -> list[dict[str, Any]]:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
-@app.post("/docker/containers/{container_id}/start")
+@app.post("/colima/containers/{container_id}/start")
 def start_container(container_id: str) -> dict[str, str]:
     container = get_container_or_404(container_id)
     try:
@@ -217,7 +217,7 @@ def start_container(container_id: str) -> dict[str, str]:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
-@app.post("/docker/containers/{container_id}/stop")
+@app.post("/colima/containers/{container_id}/stop")
 def stop_container(container_id: str) -> dict[str, str]:
     container = get_container_or_404(container_id)
     try:
@@ -227,7 +227,7 @@ def stop_container(container_id: str) -> dict[str, str]:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
-@app.get("/docker/containers/{container_id}/console", response_class=HTMLResponse)
+@app.get("/colima/containers/{container_id}/console", response_class=HTMLResponse)
 def container_console(container_id: str) -> str:
     container = get_container_or_404(container_id)
     safe_name = html.escape(container.name)
@@ -271,7 +271,7 @@ def container_console(container_id: str) -> str:
       <body>
         <div class="card">
           <h1>Container console: {safe_name}</h1>
-          <p>Browser terminals require a WebSocket exec bridge. For this demo, copy one of these commands into your local terminal:</p>
+          <p>Browser terminals require a WebSocket exec bridge. For this demo, copy one of these commands into your local terminal (requires Colima running):</p>
           <code>{sh_command}</code>
           <code>{bash_command}</code>
           <p>Container ID: {safe_id}</p>
@@ -281,9 +281,9 @@ def container_console(container_id: str) -> str:
     """
 
 
-@app.get("/docker/images")
-def docker_images() -> list[dict[str, Any]]:
-    client = get_docker_client()
+@app.get("/colima/images")
+def colima_images() -> list[dict[str, Any]]:
+    client = get_colima_client()
 
     try:
         images = client.images.list()
@@ -309,9 +309,9 @@ def docker_images() -> list[dict[str, Any]]:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
-@app.post("/docker/images/run")
+@app.post("/colima/images/run")
 def run_image(payload: RunImageRequest) -> dict[str, Any]:
-    client = get_docker_client()
+    client = get_colima_client()
 
     try:
         container = client.containers.run(
@@ -330,9 +330,9 @@ def run_image(payload: RunImageRequest) -> dict[str, Any]:
         raise HTTPException(status_code=503, detail=str(exc)) from exc
 
 
-@app.get("/docker/volumes")
-def docker_volumes() -> list[dict[str, Any]]:
-    client = get_docker_client()
+@app.get("/colima/volumes")
+def colima_volumes() -> list[dict[str, Any]]:
+    client = get_colima_client()
 
     try:
         volumes = client.volumes.list()

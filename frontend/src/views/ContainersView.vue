@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { ChevronDown, ChevronRight, Columns3, ExternalLink, MoreVertical, Play, Search, Square, Trash2 } from 'lucide-vue-next'
-import { API_BASE, getContainers, getDockerInfo, startContainer, stopContainer } from '@/services/dockerApi'
+import { API_BASE, getContainers, getColimaInfo, startContainer, stopContainer } from '@/services/colimaApi'
 
 const containers = ref([])
 const info = ref(null)
@@ -68,12 +68,12 @@ async function loadData() {
   loading.value = true
   error.value = null
   try {
-    const [dockerInfo, dockerContainers] = await Promise.all([getDockerInfo(), getContainers()])
+    const [dockerInfo, dockerContainers] = await Promise.all([getColimaInfo(), getContainers()])
     info.value = dockerInfo
     containers.value = dockerContainers
     expandedProjects.value = new Set(dockerContainers.map((item) => item.project).filter(Boolean))
   } catch (err) {
-    error.value = err.message || 'Could not load Docker containers'
+    error.value = err.message || 'Could not load Colima containers'
   } finally {
     loading.value = false
   }

@@ -1,21 +1,22 @@
-name: opendockerwebui
+name: opencolimaui
 
 services:
   backend:
     build:
       context: ./backend
-    container_name: opendockerwebui-backend
+    container_name: opencolimaui-backend
     ports:
       - "8000:8000"
     volumes:
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ${COLIMA_SOCKET_PATH:-$HOME/.colima/default/docker.sock}:/var/run/docker.sock
     environment:
       - CORS_ORIGINS=http://localhost:5173,http://127.0.0.1:5173
+      - DOCKER_HOST=unix:///var/run/docker.sock
 
   frontend:
     build:
       context: ./frontend
-    container_name: opendockerwebui-frontend
+    container_name: opencolimaui-frontend
     ports:
       - "5173:5173"
     environment:
