@@ -1,6 +1,6 @@
 <script setup>
 import { onMounted, ref } from 'vue'
-import { API_BASE, getHealth } from '@/services/dockerApi'
+import { API_BASE, getHealth } from '@/services/colimaApi'
 
 const health = ref('checking')
 const error = ref(null)

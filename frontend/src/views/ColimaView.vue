@@ -1,7 +1,7 @@
 <script setup>
 import { computed, onMounted, ref } from 'vue'
 import { Cpu, Database, HardDrive, RefreshCw, Server } from 'lucide-vue-next'
-import { getContainers, getDockerInfo, getImages } from '@/services/dockerApi'
+import { getContainers, getColimaInfo, getImages } from '@/services/colimaApi'
 
 const info = ref(null)
 const containers = ref([])
@@ -24,17 +24,17 @@ async function loadData() {
   error.value = null
 
   try {
-    const [dockerInfo, dockerContainers, dockerImages] = await Promise.all([
-      getDockerInfo(),
+    const [colimaInfo, colimaContainers, colimaImages] = await Promise.all([
+      getColimaInfo(),
       getContainers(),
       getImages()
     ])
 
-    info.value = dockerInfo
-    containers.value = dockerContainers
-    images.value = dockerImages
+    info.value = colimaInfo
+    containers.value = colimaContainers
+    images.value = colimaImages
   } catch (err) {
-    error.value = err.message || 'Could not load Docker data'
+    error.value = err.message || 'Could not load Colima data'
   } finally {
     loading.value = false
   }
@@ -47,8 +47,8 @@ onMounted(loadData)
   <section class="page">
     <header class="page-header">
       <div>
-        <h1 class="page-title">Docker Desktop Dashboard</h1>
-        <p class="page-subtitle">Live overview of Docker Engine, containers and images.</p>
+        <h1 class="page-title">Colima Dashboard</h1>
+        <p class="page-subtitle">Live overview of Colima runtime, containers and images.</p>
       </div>
 
       <button class="primary-button" @click="loadData">
@@ -57,7 +57,7 @@ onMounted(loadData)
       </button>
     </header>
 
-    <div v-if="loading" class="loading-box">Loading Docker information...</div>
+    <div v-if="loading" class="loading-box">Loading Colima information...</div>
     <div v-else-if="error" class="error-box">{{ error }}</div>
 
     <template v-else>

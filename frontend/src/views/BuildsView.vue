@@ -20,8 +20,8 @@ const rows = [
 
     <div class="banner">
       <div>
-        <strong>Build large and multi-platform Docker images faster in Docker Build Cloud.</strong>
-        <span>To improve build speeds for you, your team, and even your CI, try Docker Build Cloud now</span>
+        <strong>Build large and multi-platform images faster with Colima and BuildKit.</strong>
+        <span>Colima supports BuildKit for faster, more efficient image builds</span>
       </div>
       <X />
     </div>
